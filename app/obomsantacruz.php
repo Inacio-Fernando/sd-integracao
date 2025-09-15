@@ -70,7 +70,7 @@ try {
 		}
 
 		##MYSQL
-		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=pioneiro', 'cartazdb', 'tbCJShR2');
+		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=obomsantacruz', 'cartazdb', 'tbCJShR2');
 		$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		$query2 = $con2->query("SELECT count(*) as quantidade from `cf_produto` WHERE `prod_id`='$id'");
@@ -131,7 +131,7 @@ try {
 		$valor2 = number_format($valor3, 2, '.', '');
 		$valor = str_replace('.', ',', $valor2);
 
-		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=pioneiro', 'cartazdb', 'tbCJShR2');
+		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=obomsantacruz', 'cartazdb', 'tbCJShR2');
 		$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
@@ -216,7 +216,7 @@ try {
 
 		$valor_completo = $valor;
 
-		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=pioneiro', 'cartazdb', 'tbCJShR2');
+		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=obomsantacruz', 'cartazdb', 'tbCJShR2');
 		$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		$query2 = $con2->query("SELECT count(*) as quantidade ,vlr_produto from `cf_valor` WHERE `vlr_produto`='$idproduto' AND `vlr_filial`='$filial'");
@@ -263,7 +263,7 @@ try {
 		$con2 = null;
 	}
 
-	$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=pioneiro', 'cartazdb', 'tbCJShR2');
+	$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=obomsantacruz', 'cartazdb', 'tbCJShR2');
 	$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$insert = $con2->prepare('INSERT INTO cf_logs (log_empresa,log_filial,log_usuario,log_data,log_mensagem)VALUES(:log_empresa,:log_filial,:log_usuario,:log_data,:log_mensagem)');
 	$insert->execute(array(
