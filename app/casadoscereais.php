@@ -15,7 +15,7 @@ try {
 	$con1 = new PDO('firebird:dbname=177.10.168.173/3050:/SDSuper/Dados/SDSuper.fdb', 'CONSULTORIA', 'CONSULTA321');
 	$con1->query("SET CHARACTER SET utf8");
 	$sql_stmt2 = $con1->prepare("SELECT WIDPRODUTO, WNOMEGONDOLA, WDATAULTIMAALTERACAO,
-	WCODIGOPRINCIPAL, WIDSECAO, WIDUNIDADE FROM PRODUTOS");
+	WCODIGOPRINCIPAL, WIDSECAO, WIDUNIDADE FROM PRODUTOS WHERE WDATAULTIMAALTERACAO >= '$dataFormat'");
 
 
 	$sql_stmt2->execute();
@@ -93,15 +93,13 @@ try {
 	echo $e;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //VALORES
 try {
 	##FIREBIRD
 	$con1 = new PDO('firebird:dbname=177.10.168.173/3050:/SDSuper/Dados/SDSuper.fdb', 'CONSULTORIA', 'CONSULTA321');
 	$con1->query("SET CHARACTER SET utf8");
-	$sql_stmt2 = $con1->prepare("SELECT WIDFILIAL, WIDPRODUTO, WPRECO FROM PRECOSVENDA");
+	$sql_stmt2 = $con1->prepare("SELECT WIDFILIAL, WIDPRODUTO, WPRECO FROM PRECOSVENDA WHERE WDATAALTERACAO >= '$dataFormat'");
 
 	// WHERE WDATAALTERACAO >= '$dataFormat'"
 	$sql_stmt2->execute();
@@ -170,7 +168,7 @@ try {
 	$sql_stmt2 = $con1->prepare("SELECT WFILIAIS,WPRECOPROMOCAO,WDATAINICIO,
 	WDATATERMINO,ANTPRODUTOS.WORDEMPDVPRODUTO, CODIGOSPRO.widproduto, PRECOSVENDA.WPRECO FROM ANTPRODUTOS
 	INNER JOIN CODIGOSPRO ON ANTPRODUTOS.WIDPRODUTO = CODIGOSPRO.wordempdvproduto 
-	INNER JOIN PRECOSVENDA ON CODIGOSPRO.widproduto = PRECOSVENDA.WIDPRODUTO");
+	INNER JOIN PRECOSVENDA ON CODIGOSPRO.widproduto = PRECOSVENDA.WIDPRODUTO WHERE ANTPRODUTOS.WDATAINICIO >= '$dataFormat'");
 
 
 	$sql_stmt2->execute();
