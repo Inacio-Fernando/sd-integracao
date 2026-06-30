@@ -22,7 +22,7 @@ try {
 
 	while ($row = $sql_stmt2->fetch()) {
 		$id = $row[0];
-		$codigo = $row[3];
+		$codigo = $row[0];
 		$descricao = $row[1];
 		$dataalteracao = $row[2];
 		$sku = $row[3];
