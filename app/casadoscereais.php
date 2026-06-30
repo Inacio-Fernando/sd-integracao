@@ -214,6 +214,16 @@ try {
 				':vlr_idcomercial' => '2',
 				':vlr_hora' => '06:06'
 			));
+			$insert->execute(array(
+				':vlr_usuario' =>  '1',
+				':vlr_produto' =>  $idproduto,
+				':vlr_filial' => $filial,
+				':vlr_valores' => $valor,
+				':vlr_data_de' => $dataInicio,
+				':vlr_data_ate' => $dataFim,
+				':vlr_idcomercial' => '1',
+				':vlr_hora' => '06:06'
+			));
 		} else {
 			$insert = $con2->prepare('INSERT INTO cf_valor (vlr_produto,vlr_filial,vlr_empresa,vlr_valores,vlr_idcomercial,vlr_data_de,vlr_data_ate,vlr_usuario,vlr_hora) 
 			VALUES(:vlr_produto,:vlr_filial,:vlr_empresa,:vlr_valores,:vlr_idcomercial,:vlr_data_de,:vlr_data_ate,:vlr_usuario,:vlr_hora)');
@@ -223,6 +233,17 @@ try {
 				':vlr_empresa' => '1',
 				':vlr_valores' => $valor_completo,
 				':vlr_idcomercial' => '2',
+				':vlr_data_de' => $dataInicio,
+				':vlr_data_ate' => $dataFim,
+				':vlr_usuario' => '1',
+				':vlr_hora' => '06:06'
+			));
+			$insert->execute(array(
+				':vlr_produto' =>  $idproduto,
+				':vlr_filial' => $filial,
+				':vlr_empresa' => '1',
+				':vlr_valores' => $valor,
+				':vlr_idcomercial' => '1',
 				':vlr_data_de' => $dataInicio,
 				':vlr_data_ate' => $dataFim,
 				':vlr_usuario' => '1',
