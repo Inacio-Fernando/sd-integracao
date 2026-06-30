@@ -17,7 +17,6 @@ try {
 	$sql_stmt2 = $con1->prepare("SELECT WIDPRODUTO, WNOMEGONDOLA, WDATAULTIMAALTERACAO,
 	WCODIGOPRINCIPAL, WIDSECAO, WIDUNIDADE FROM PRODUTOS WHERE WDATAULTIMAALTERACAO >= '$dataFormat'");
 
-
 	$sql_stmt2->execute();
 
 	while ($row = $sql_stmt2->fetch()) {
@@ -68,8 +67,8 @@ try {
 
 
 		if ($quantidadeProd < 1) {
-			$insert = $con2->prepare('INSERT INTO cf_produto (prod_id, prod_cod,prod_nome,prod_sessao,prod_empresa,prod_filial,prod_sku,prod_proporcao,prod_desc,prod_revisao,prod_flag100g) 
-		VALUES(:prod_id,:prod_cod,:prod_nome,:prod_sessao,:prod_empresa,:prod_filial,:prod_sku,:prod_proporcao,:prod_desc,:prod_revisao,:prod_flag100g)');
+			$insert = $con2->prepare('INSERT INTO cf_produto (prod_cod,prod_nome,prod_sessao,prod_empresa,prod_filial,prod_sku,prod_proporcao,prod_desc,prod_revisao,prod_flag100g) 
+		VALUES(:prod_cod,:prod_nome,:prod_sessao,:prod_empresa,:prod_filial,:prod_sku,:prod_proporcao,:prod_desc,:prod_revisao,:prod_flag100g)');
 			$insert->execute(array(
 				':prod_cod' =>  $codigo,
 				':prod_nome' => $descricao,
@@ -116,17 +115,26 @@ try {
 		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=casadoscereais', 'cartazdb', 'tbCJShR2');
 		$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$query2 = $con2->query("SELECT count(*) as quantidade ,vlr_produto from `cf_valor` WHERE `vlr_produto`='$idproduto' AND `vlr_filial`='$filial'");
+		$query3 = $con2->query("SELECT prod_id as prod_id from `cf_produto` WHERE `prod_cod`='$idproduto'");
+		$rows = $query3->fetchAll(PDO::FETCH_OBJ);
+
+		foreach ($rows as $r => $value) {
+			$produto_id =  $value->prod_id;
+		}
+
+
+		$query2 = $con2->query("SELECT count(*) as quantidade ,vlr_produto from `cf_valor` WHERE `vlr_produto`='$produto_id' AND `vlr_filial`='$filial'");
 		$rows = $query2->fetchAll(PDO::FETCH_OBJ);
 
 		foreach ($rows as $r => $value) {
 			$quantidade =  $value->quantidade;
 		}
 
+
 		if ($quantidade > 0) {
 			$insert = $con2->prepare('UPDATE cf_valor SET vlr_valores = :vlr_valores, vlr_data_de = :vlr_data_de, vlr_data_ate = :vlr_data_ate, vlr_hora = :vlr_hora WHERE `vlr_produto`= :vlr_produto AND `vlr_filial`= :vlr_filial');
 			$insert->execute(array(
-				':vlr_produto' =>  $idproduto,
+				':vlr_produto' =>  $produto_id,
 				':vlr_filial' => $filial,
 				':vlr_valores' => $valor,
 				':vlr_data_de' => $today,
@@ -137,7 +145,7 @@ try {
 			$insert = $con2->prepare('INSERT INTO cf_valor (vlr_produto,vlr_filial,vlr_empresa,vlr_valores,vlr_idcomercial,vlr_data_de,vlr_data_ate,vlr_usuario,vlr_hora) 
 				VALUES(:vlr_produto,:vlr_filial,:vlr_empresa,:vlr_valores,:vlr_idcomercial,:vlr_data_de,:vlr_data_ate,:vlr_usuario,:vlr_hora)');
 			$insert->execute(array(
-				':vlr_produto' =>  $idproduto,
+				':vlr_produto' =>  $produto_id,
 				':vlr_filial' => $filial,
 				':vlr_empresa' => '1',
 				':vlr_valores' => $valor,
@@ -167,7 +175,7 @@ try {
 	$sql_stmt2 = $con1->prepare("SELECT WFILIAIS,WPRECOPROMOCAO,WDATAINICIO,
 	WDATATERMINO,ANTPRODUTOS.WORDEMPDVPRODUTO, CODIGOSPRO.widproduto, PRECOSVENDA.WPRECO FROM ANTPRODUTOS
 	INNER JOIN CODIGOSPRO ON ANTPRODUTOS.WIDPRODUTO = CODIGOSPRO.wordempdvproduto 
-	INNER JOIN PRECOSVENDA ON CODIGOSPRO.widproduto = PRECOSVENDA.WIDPRODUTO WHERE ANTPRODUTOS.WDATAINICIO >= '$dataFormat'");
+	INNER JOIN PRECOSVENDA ON CODIGOSPRO.widproduto = PRECOSVENDA.WIDPRODUTO WHERE ANTPRODUTOS.WDATATERMINO >= '$dataFormat'");
 
 
 	$sql_stmt2->execute();
@@ -194,7 +202,14 @@ try {
 		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=casadoscereais', 'cartazdb', 'tbCJShR2');
 		$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$query2 = $con2->query("SELECT count(*) as quantidade ,vlr_produto from `cf_valor` WHERE `vlr_produto`='$idproduto' AND `vlr_filial`='$filial'");
+		$query3 = $con2->query("SELECT prod_id as prod_id from `cf_produto` WHERE `prod_cod`='$idproduto'");
+		$rows = $query3->fetchAll(PDO::FETCH_OBJ);
+
+		foreach ($rows as $r => $value) {
+			$produto_id =  $value->prod_id;
+		}
+
+		$query2 = $con2->query("SELECT count(*) as quantidade ,vlr_produto from `cf_valor` WHERE `vlr_produto`='$produto_id' AND `vlr_filial`='$filial'");
 		$rows = $query2->fetchAll(PDO::FETCH_OBJ);
 
 		foreach ($rows as $r => $value) {
@@ -205,17 +220,7 @@ try {
 			$insert = $con2->prepare('UPDATE cf_valor SET vlr_usuario  = :vlr_usuario, vlr_valores = :vlr_valores, vlr_data_de = :vlr_data_de, vlr_data_ate = :vlr_data_ate,vlr_idcomercial = :vlr_idcomercial,  vlr_hora = :vlr_hora WHERE `vlr_produto`= :vlr_produto AND `vlr_filial`= :vlr_filial');
 			$insert->execute(array(
 				':vlr_usuario' =>  '1',
-				':vlr_produto' =>  $idproduto,
-				':vlr_filial' => $filial,
-				':vlr_valores' => $valor_completo,
-				':vlr_data_de' => $dataInicio,
-				':vlr_data_ate' => $dataFim,
-				':vlr_idcomercial' => '2',
-				':vlr_hora' => '06:06'
-			));
-			$insert->execute(array(
-				':vlr_usuario' =>  '1',
-				':vlr_produto' =>  $idproduto,
+				':vlr_produto' =>  $produto_id,
 				':vlr_filial' => $filial,
 				':vlr_valores' => $valor,
 				':vlr_data_de' => $dataInicio,
@@ -227,18 +232,7 @@ try {
 			$insert = $con2->prepare('INSERT INTO cf_valor (vlr_produto,vlr_filial,vlr_empresa,vlr_valores,vlr_idcomercial,vlr_data_de,vlr_data_ate,vlr_usuario,vlr_hora) 
 			VALUES(:vlr_produto,:vlr_filial,:vlr_empresa,:vlr_valores,:vlr_idcomercial,:vlr_data_de,:vlr_data_ate,:vlr_usuario,:vlr_hora)');
 			$insert->execute(array(
-				':vlr_produto' =>  $idproduto,
-				':vlr_filial' => $filial,
-				':vlr_empresa' => '1',
-				':vlr_valores' => $valor_completo,
-				':vlr_idcomercial' => '2',
-				':vlr_data_de' => $dataInicio,
-				':vlr_data_ate' => $dataFim,
-				':vlr_usuario' => '1',
-				':vlr_hora' => '06:06'
-			));
-			$insert->execute(array(
-				':vlr_produto' =>  $idproduto,
+				':vlr_produto' =>  $produto_id,
 				':vlr_filial' => $filial,
 				':vlr_empresa' => '1',
 				':vlr_valores' => $valor,
@@ -249,7 +243,6 @@ try {
 				':vlr_hora' => '06:06'
 			));
 		}
-
 
 		$con1 = null;
 		$con2 = null;
@@ -265,7 +258,6 @@ try {
 		':log_data' =>  $today,
 		':log_mensagem' => 'IMPORTACAO DE VALORES e PRODUTOS REALIZADA',
 	));
-
 	echo "Produtos e Valores Atualizados;";
 } catch (Exception $e) {
 }
