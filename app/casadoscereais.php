@@ -71,7 +71,6 @@ try {
 			$insert = $con2->prepare('INSERT INTO cf_produto (prod_id, prod_cod,prod_nome,prod_sessao,prod_empresa,prod_filial,prod_sku,prod_proporcao,prod_desc,prod_revisao,prod_flag100g) 
 		VALUES(:prod_id,:prod_cod,:prod_nome,:prod_sessao,:prod_empresa,:prod_filial,:prod_sku,:prod_proporcao,:prod_desc,:prod_revisao,:prod_flag100g)');
 			$insert->execute(array(
-				':prod_id' =>  $id,
 				':prod_cod' =>  $codigo,
 				':prod_nome' => $descricao,
 				':prod_sessao' => $idgrupo,
