@@ -59,7 +59,7 @@ try {
 		$con2 = new PDO('mysql:host=cartazfacilpro.ctj8bnjcqdvd.us-east-2.rds.amazonaws.com;dbname=casadoscereais', 'cartazdb', 'tbCJShR2');
 		$con2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$query2 = $con2->query("SELECT count(*) as quantidade from `cf_produto` WHERE `prod_id`='$id'");
+		$query2 = $con2->query("SELECT count(*) as quantidade from `cf_produto` WHERE `prod_cod`='$id'");
 		$rows = $query2->fetchAll(PDO::FETCH_OBJ);
 
 		foreach ($rows as $r => $value) {
